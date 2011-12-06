@@ -66,7 +66,7 @@ private[kafka] class ZookeeperConsumerConnector(val config: ConsumerConfig,
     java.util.Map[String,java.util.List[KafkaMessageStream]] = {
     import scala.collection.JavaConversions._
 
-    val scalaTopicCountMap: Map[String, Int] = Map.empty[String, Int] ++ asMap(topicCountMap.asInstanceOf[java.util.Map[String, Int]])
+    val scalaTopicCountMap: Map[String, Int] = Map.empty[String, Int] ++ mapAsScalaMap(topicCountMap.asInstanceOf[java.util.Map[String, Int]])
     val scalaReturn = underlying.consume(scalaTopicCountMap)
     val ret = new java.util.HashMap[String,java.util.List[KafkaMessageStream]]
     for ((topic, streams) <- scalaReturn) {

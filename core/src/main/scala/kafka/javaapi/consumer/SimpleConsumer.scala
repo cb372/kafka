@@ -51,7 +51,7 @@ class SimpleConsumer(val host: String,
   def multifetch(fetches: java.util.List[FetchRequest]): MultiFetchResponse = {
     import scala.collection.JavaConversions._
     import kafka.javaapi.Implicits._
-    underlying.multifetch(asBuffer(fetches): _*)
+    underlying.multifetch(asScalaBuffer(fetches): _*)
   }
 
   /**

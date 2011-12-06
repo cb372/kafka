@@ -26,7 +26,7 @@ class Pool[K,V] extends Iterable[(K, V)] {
   
   def this(m: collection.Map[K, V]) {
     this()
-    for((k,v) <- m.elements)
+    for((k,v) <- m.iterator)
       pool.put(k, v)
   }
   
@@ -40,10 +40,10 @@ class Pool[K,V] extends Iterable[(K, V)] {
   
   def remove(key: K): V = pool.remove(key)
   
-  def keys = JavaConversions.asSet(pool.keySet())
+  def keys = JavaConversions.asScalaSet(pool.keySet())
   
   def values: Iterable[V] = 
-    JavaConversions.asIterable(new ArrayList[V](pool.values()))
+    JavaConversions.collectionAsScalaIterable(new ArrayList[V](pool.values()))
   
   def clear: Unit = pool.clear()
   

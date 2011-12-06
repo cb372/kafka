@@ -42,7 +42,7 @@ class ByteBufferMessageSet(private val buffer: ByteBuffer,
         buffer
       case _ =>
         import scala.collection.JavaConversions._
-        val message = CompressionUtils.compress(asBuffer(messages), compressionCodec)
+        val message = CompressionUtils.compress(asScalaBuffer(messages), compressionCodec)
         val buffer = ByteBuffer.allocate(message.serializedSize)
         message.serializeTo(buffer)
         buffer.rewind

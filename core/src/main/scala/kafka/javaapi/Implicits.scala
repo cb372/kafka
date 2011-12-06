@@ -51,7 +51,7 @@ private[javaapi] object Implicits {
       override def init(props: java.util.Properties) { eventHandler.init(props) }
       override def handle(events: Seq[QueueItem[T]], producer: kafka.producer.SyncProducer, encoder: Encoder[T]) {
         import collection.JavaConversions._
-        eventHandler.handle(asList(events), producer, encoder)
+        eventHandler.handle(seqAsJavaList(events), producer, encoder)
       }
       override def close { eventHandler.close }
     }
@@ -64,7 +64,7 @@ private[javaapi] object Implicits {
       override def handle(events: java.util.List[QueueItem[T]], producer: kafka.javaapi.producer.SyncProducer,
                           encoder: Encoder[T]) {
         import collection.JavaConversions._
-        eventHandler.handle(asBuffer(events), producer, encoder)
+        eventHandler.handle(asScalaBuffer(events), producer, encoder)
       }
       override def close { eventHandler.close }
     }
@@ -85,10 +85,10 @@ private[javaapi] object Implicits {
         cbkHandler.afterDequeuingExistingData(data)
       }
       override def beforeSendingData(data: Seq[QueueItem[T]] = null): scala.collection.mutable.Seq[QueueItem[T]] = {
-        asList(cbkHandler.beforeSendingData(asList(data)))
+        bufferAsJavaList(cbkHandler.beforeSendingData(seqAsJavaList(data)))
       }
       override def lastBatchBeforeClose: scala.collection.mutable.Seq[QueueItem[T]] = {
-        asBuffer(cbkHandler.lastBatchBeforeClose)
+        asScalaBuffer(cbkHandler.lastBatchBeforeClose)
       }
       override def close { cbkHandler.close }
     }
@@ -107,14 +107,14 @@ private[javaapi] object Implicits {
       }
       override def afterDequeuingExistingData(data: QueueItem[T] = null)
       : java.util.List[QueueItem[T]] = {
-        asList(cbkHandler.afterDequeuingExistingData(data))
+        mutableSeqAsJavaList(cbkHandler.afterDequeuingExistingData(data))
       }
       override def beforeSendingData(data: java.util.List[QueueItem[T]] = null)
       : java.util.List[QueueItem[T]] = {
-        asBuffer(cbkHandler.beforeSendingData(asBuffer(data)))
+        asScalaBuffer(cbkHandler.beforeSendingData(asScalaBuffer(data)))
       }
       override def lastBatchBeforeClose: java.util.List[QueueItem[T]] = {
-        asList(cbkHandler.lastBatchBeforeClose)
+        mutableSeqAsJavaList(cbkHandler.lastBatchBeforeClose)
       }
       override def close { cbkHandler.close }
     }
